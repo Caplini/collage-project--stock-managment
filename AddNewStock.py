@@ -49,7 +49,7 @@ def AddItemToDataBase():
         AddNewItemMenuClassEnt.insert(0, "")
 
         AddNewItemMenuTypeEnt.delete(0, END)
-        AddNewItemMenuTypeEnt.insert(0, "")
+        AddNewItemMenuTypeEnt.insert(0, " ")
 
     
     # get code list into list
