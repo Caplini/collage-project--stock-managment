@@ -45,7 +45,7 @@ MainMenuLabel.grid(column=1,
                    )
 
 # locate settings icon image and resieze 
-SettingsIcon = PhotoImage(file=r"C:\Users\iiija\Desktop\A_Level_CP\project\Cod\assigment\Cod\setting.png")
+SettingsIcon = PhotoImage(file=r"setting.png")
 SettingsIcon = SettingsIcon.subsample(20,20)
 
 # settings button

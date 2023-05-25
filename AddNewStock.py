@@ -30,10 +30,11 @@ def AddItemToDataBase():
         # command to add each entry to data base on button click 
         cur.execute("INSERT INTO Item (ItemName, ItemCode, Count, ClassID, TypeID) VALUES (?,?,?,?,?)", (ItemName, ItemCode, Count, ClassID, TypeID))     
     
+    # command to open error box and reset boxes
     def ResetBoxesError():
         print(f"Make sure all box's are present and the code is not already in the database")
         
-        ctypes.windll.user32.MessageBoxW(0, f"Error, Make sure all box's are present, all data is the correct type and the code is not already in the database", "Error", 1) # show error messge if item code is already present
+        ctypes.windll.user32.MessageBoxW(0, f"Error, Make sure all box's are present, all data is the correct type and the code is not already in the database", "Error", 1) # show error messge 
         
         # reset boxes
         AddNewItemMenuCodeEnt.delete(0, END)
@@ -59,15 +60,12 @@ def AddItemToDataBase():
     ColumnList = [row[0] for row in rows] # put all from column into list
 
             
-    if any(x== ""  for x in (ItemName, ItemCode, ClassID, TypeID, Count)) or Count.isnumeric() == False or ItemCode in ColumnList:
-        ResetBoxesError()
+    if any(x == ""  for x in (ItemName, ItemCode, ClassID, TypeID, Count)) or Count.isnumeric() == False or ItemCode in ColumnList: # check for errors 
+        ResetBoxesError() # calll command to show error
         
     else:
-        AddItem()
+        AddItem() # add item to database if all good
             
-    
-    
-    
         conn.commit() # update data base with changes
         conn.close() # close data base
 
