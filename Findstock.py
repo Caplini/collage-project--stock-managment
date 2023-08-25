@@ -8,8 +8,32 @@ import random
 import time
 import customtkinter
 
+import sqlite3
+import ctypes
+
+ # function that finds the item postion from the code entered
+def LocateAndShowPostion():
+    
+    # get each entry and give it a variable 
+    ItemNameToFind = FindStockEnt.get() # Get the value from the ItemCode Entry field
+    print(ItemNameToFind)
+
+    conn = sqlite3.connect("Stock.db") # call which database 
+    cur = conn.cursor() # add cursor
+
+    ItemCode_query = 'SELECT ItemCode FROM Item WHERE ItemName = ?'
+    cur.execute(ItemCode_query, (ItemNameToFind,)) # Execute the query with ItemNameToFind as parameter 
+
+    if ItemCode_query is None: # If the ItemCode was not found
+        print("ItemName not found in the database")
+        ctypes.windll.user32.MessageBoxW(0, f"Error, Make sure the item name is correct", "Error", 1) # show error messge
+    else:
+        print(cur.fetchone()[0])
+
  # Find Stock menu 
 def FindStockMenuFunc():
+    global FindStockEnt
+    
     FindStockMenu = customtkinter.CTkToplevel() # window for waste menu
     FindStockMenu.configure(height=150,
                    width=300,
@@ -22,7 +46,8 @@ def FindStockMenuFunc():
                                           height=35,
                                           fg_color="#828282",
                                           font=customtkinter.CTkFont(family="Helvetica", size=14),
-                                          corner_radius=4
+                                          corner_radius=4,
+                                          placeholder_text="Item Name"
                                           )
 
     FindStockEnt.grid(column=0,
@@ -40,7 +65,8 @@ def FindStockMenuFunc():
                                         height=30,
                                         corner_radius=6,
                                         fg_color="#828282",
-                                        hover_color="#3d3d3d")
+                                        hover_color="#3d3d3d",
+                                        command=LocateAndShowPostion)
     
     FindStockSubmitButton.grid(column=0,
                          row=1,

@@ -13,6 +13,8 @@ import ctypes
 
 # Menus
 
+WastedItemsFile = open("wasted.txt", "r+")
+
 # take count off amount in database
 def WasteItemFinal():
     
@@ -50,8 +52,12 @@ def WasteItemFinal():
 
     conn.close() # close database
 
+    WastedItems.configure(state="normal")
     WastedItems.insert(END, f"{ItemCodeToWaste.ljust(50)}{updated_count[0]} \n", tags=None)
-    # improve formatting 
+    WastedItems.configure(state="disabled")
+    WastedItemsFile.write(f"{ItemCodeToWaste.ljust(50)}{updated_count[0]}\n")
+
+
 # add waste button
 
 def Addwaste():
@@ -70,7 +76,7 @@ def Addwaste():
     WasteInfo = customtkinter.CTkFrame(master=WasteAdd,
                                     fg_color="#2b2b2b",
                                     corner_radius=0)
-    
+
     WasteInfo.grid(
         column=0,
         row=0)
@@ -85,13 +91,13 @@ def Addwaste():
                                           corner_radius=4,
                                           placeholder_text="Enter Code"
                                           )
-   
+
     ItemCode.grid(column=0,
                       row=0,
                       pady=10,
                       padx=15,
                       sticky="NS")
-    
+
     ItemCount = customtkinter.CTkEntry(master=WasteInfo,
                                           width=100,
                                           height=35,
@@ -107,7 +113,7 @@ def Addwaste():
                       pady=10,
                       padx=15,
                       sticky="NS")
-    
+
 
     # Button Submit waste
     WasteItem = customtkinter.CTkButton(master=WasteAdd,
@@ -119,7 +125,7 @@ def Addwaste():
                                         fg_color="#828282",
                                         hover_color="#3d3d3d",
                                         command=WasteItemFinal)
-    
+
     WasteItem.grid(column=0,
                          row=1,
                          pady=10,
@@ -156,6 +162,7 @@ def WasteMenuFunc():
                                     height=15,
                                     width=600,
                                     corner_radius=0)
+    
     Filler.grid(column=0,
                 row=1)
 
@@ -167,7 +174,7 @@ def WasteMenuFunc():
 
     # Item label
     ItemLabel = customtkinter.CTkLabel(master=WasteFunctionsFrame, 
-                                       text="Item:                ",
+                                       text="Item:            ",
                                        font=customtkinter.CTkFont(family="Helvetica", size=20),
                                        corner_radius=20,
                                        anchor="center")
@@ -179,7 +186,7 @@ def WasteMenuFunc():
 
     # tags label
     TagsLabel = customtkinter.CTkLabel(master=WasteFunctionsFrame, 
-                                       text="Tags:                                        ",
+                                       text="Item Count:                                        ",
                                        font=customtkinter.CTkFont(family="Helvetica", size=20),
                                        corner_radius=20,
                                        anchor="center")
@@ -206,7 +213,7 @@ def WasteMenuFunc():
                          padx=0,
                          sticky="e"
                          )
-    
+
 
     # filler gray line for formatting
     Filler = customtkinter.CTkFrame(master=WasteMenu,
@@ -219,7 +226,12 @@ def WasteMenuFunc():
                 row=3)
     
     WastedItems = customtkinter.CTkTextbox(master=WasteMenu,
-                                           width=600)
+                                           width=600
+                                           )
 
     WastedItems.grid(column=0,
                 row=4)
+    
+    
+    WastedItems.insert(END, WastedItemsFile.read())
+    WastedItems.configure(state="disabled")

@@ -14,6 +14,7 @@ from AddNewStock import AddNewItemMenuFunc
 from EditCheckStock import EditCheckItemsMenuFunc
 from Settings import SettingsMenuFunc
 
+f = open("wasted.txt")
 
 # main menu
 
