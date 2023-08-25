@@ -16,7 +16,6 @@ def LocateAndShowPostion():
     
     # get each entry and give it a variable 
     ItemNameToFind = FindStockEnt.get() # Get the value from the ItemCode Entry field
-    print(ItemNameToFind)
 
     conn = sqlite3.connect("Stock.db") # call which database 
     cur = conn.cursor() # add cursor
@@ -24,10 +23,13 @@ def LocateAndShowPostion():
     ItemCode_query = 'SELECT ItemCode FROM Item WHERE ItemName = ?'
     cur.execute(ItemCode_query, (ItemNameToFind,)) # Execute the query with ItemNameToFind as parameter 
 
+    ItemCode = cur.fetchone()[0]
+
     if ItemCode_query is None: # If the ItemCode was not found
         print("ItemName not found in the database")
         ctypes.windll.user32.MessageBoxW(0, f"Error, Make sure the item name is correct", "Error", 1) # show error messge
     else:
+        ctypes.windll.user32.MessageBoxW(0, f"Item located at isle {ItemCode[0:2]}, position {ItemCode[3::]}", "Item Found!", 1)
         print(cur.fetchone()[0])
 
  # Find Stock menu 
