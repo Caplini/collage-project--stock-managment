@@ -29,7 +29,7 @@ def LocateAndShowPostion():
         print("ItemName not found in the database")
         ctypes.windll.user32.MessageBoxW(0, f"Error, Make sure the item name is correct", "Error", 1) # show error messge
     else:
-        ctypes.windll.user32.MessageBoxW(0, f"Item located at isle {ItemCode[0:2]}, position {ItemCode[3::]}", "Item Found!", 1)
+        ctypes.windll.user32.MessageBoxW(0, f"Item located at isle {ItemCode[0:2]}, position {ItemCode[3::]}", f"Item Found! ({ItemCode})", 1)
         print(cur.fetchone()[0])
 
  # Find Stock menu 

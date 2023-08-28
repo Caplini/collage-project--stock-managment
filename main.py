@@ -11,7 +11,7 @@ import customtkinter
 from waste import WasteMenuFunc
 from Findstock import FindStockMenuFunc
 from AddNewStock import AddNewItemMenuFunc
-from EditCheckStock import EditCheckItemsMenuFunc
+from EditCheckStock import EditItemFunc
 from Settings import SettingsMenuFunc
 
 f = open("wasted.txt")
@@ -132,7 +132,7 @@ EditCheckButton = customtkinter.CTkButton(master=MainButtonsFrame,
                                       corner_radius=20,
                                       fg_color="#828282",
                                       hover_color="#3d3d3d",
-                                      command=EditCheckItemsMenuFunc)
+                                      command=EditItemFunc)
 EditCheckButton.grid(column=3,
                  row=1,
                  pady=40,

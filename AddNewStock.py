@@ -65,6 +65,7 @@ def AddItemToDataBase():
         
     else:
         AddItem() # add item to database if all good
+        ctypes.windll.user32.MessageBoxW(0, f"{ItemName} added successfully", "Item Added!", 1) # show error messge 
             
         conn.commit() # update data base with changes
         conn.close() # close data base
