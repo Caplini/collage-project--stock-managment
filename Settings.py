@@ -8,17 +8,50 @@ import random
 import time
 import customtkinter
 
+def set_theme(theme):
+    global SettingsMenuLightThemechkbx, SettingsMenuDarkThemechkbx, SettingsMenuCustomThemechkbx
+    if theme == 'light':
+        SettingsMenuLightThemechkbx.select()
+        SettingsMenuDarkThemechkbx.deselect()
+        SettingsMenuCustomThemechkbx.deselect()
+    elif theme == 'dark':
+        SettingsMenuLightThemechkbx.deselect()
+        SettingsMenuDarkThemechkbx.select()
+        SettingsMenuCustomThemechkbx.deselect()
+    elif theme == 'custom':
+        SettingsMenuLightThemechkbx.deselect()
+        SettingsMenuDarkThemechkbx.deselect()
+        SettingsMenuCustomThemechkbx.select()
+    save_settings(triggered_by="theme")
 
+def save_settings(triggered_by=""):
+    try:
+        with open("settings.txt", "r") as f:
+            lines = f.readlines()
 
+        if triggered_by == "primary" and PrimaryColourENT is not None:
+            lines[3] = f"{PrimaryColourENT.get()}\n"
+        elif triggered_by == "secondary" and SecondaryColourENT is not None:
+            lines[4] = f"{SecondaryColourENT.get()}\n"
+        elif triggered_by == "font" and FontColourENT is not None:
+            lines[5] = f"{FontColourENT.get()}\n"
+        else:
+            # Update everything else or handle an unknown trigger
+            pass
 
-def save_settings():
-    with open("settings.txt", "w") as f:
-        f.write(f"{SettingsMenuLightThemechkbx.get()}\n")
-        f.write(f"{SettingsMenuDarkThemechkbx.get()}\n")
-        f.write(f"{SettingsMenuCustomThemechkbx.get()}\n")
-        f.write(f"{PrimaryColourENT.get()}\n")
-        f.write(f"{SecondaryColourENT.get()}\n")
-        f.write(f"{FontColourENT.get()}\n")        
+        with open("settings.txt", "w") as f:
+            f.writelines(lines)
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+    if triggered_by == "theme":
+        with open("settings.txt", "r") as f:
+            lines = f.readlines()
+        lines[0] = f"{SettingsMenuLightThemechkbx.get()}\n"
+        lines[1] = f"{SettingsMenuDarkThemechkbx.get()}\n"
+        lines[2] = f"{SettingsMenuCustomThemechkbx.get()}\n"
+        with open("settings.txt", "w") as f:
+            f.writelines(lines)
         
 def primary_color_select_func():
     global PrimaryColourENT
@@ -49,9 +82,84 @@ def primary_color_select_func():
                                                          corner_radius=6,
                                                          fg_color="#828282",
                                                          hover_color="#3d3d3d",
-                                                         command=save_settings)
+                                                         command=lambda: save_settings(triggered_by="primary"))
     
     PrimaryColourSubmitButton.grid(column=0, row=1, pady=10, padx=25, sticky="NS")
+
+    
+
+def secondary_color_select_func():
+    global SecondaryColourENT
+    
+    # create window
+    SecondarySelect = customtkinter.CTkToplevel()
+    SecondarySelect.configure(height=150, width=300, fg_color='#2b2b2b')
+    SecondarySelect.title("Select secondary Color")
+    
+    # place in entry for primary colour
+    SecondaryColourENT = customtkinter.CTkEntry(master=SecondarySelect,  
+                                              width=200,
+                                              height=35,
+                                              fg_color="#828282",
+                                              font=customtkinter.CTkFont(family="Helvetica", size=14),
+                                              corner_radius=4,
+                                              placeholder_text="Enter secondary Color")
+    
+    SecondaryColourENT.grid(column=0, row=0, pady=10, padx=25, sticky="NS")
+
+    SecondaryColourENT.insert(0, secondary_colour) # grab current value and show
+
+    SecondaryColourSubmitButton = customtkinter.CTkButton(master=SecondarySelect,
+                                                         text="Submit",
+                                                         font=customtkinter.CTkFont(family="Helvetica", size=20),
+                                                         width=100,
+                                                         height=30,
+                                                         corner_radius=6,
+                                                         fg_color="#828282",
+                                                         hover_color="#3d3d3d",
+                                                         command=lambda: save_settings(triggered_by="secondary"))
+    
+    SecondaryColourSubmitButton.grid(column=0, row=1, pady=10, padx=25, sticky="NS")
+
+def font_color_select_func():
+    global FontColourENT
+
+    # create window
+    FontSelect = customtkinter.CTkToplevel()
+    FontSelect.configure(height=150, width=300, fg_color='#2b2b2b')
+    FontSelect.title("Select Font Color")
+
+    FontColourENT = customtkinter.CTkEntry(master=FontSelect,  
+                                           width=200,
+                                           height=35,
+                                           fg_color="#828282",
+                                           font=customtkinter.CTkFont(family="Helvetica", size=14),
+                                           corner_radius=4,
+                                           placeholder_text="Enter Font Color")
+    
+    FontColourENT.grid(column=0, row=0, pady=10, padx=25, sticky="NS")
+    FontColourENT.insert(0, font_colour)
+
+    FontColourSubmitButton = customtkinter.CTkButton(master=FontSelect,
+                                                     text="Submit",
+                                                     font=customtkinter.CTkFont(family="Helvetica", size=20),
+                                                     width=100,
+                                                     height=30,
+                                                     corner_radius=6,
+                                                     fg_color="#828282",
+                                                     hover_color="#3d3d3d",
+                                                     command=lambda: save_settings(triggered_by="font"))
+    
+    FontColourSubmitButton.grid(column=0, row=1, pady=10, padx=25, sticky="NS")
+
+def create_default_settings_file():
+    with open("settings.txt", "w") as f:
+        f.write("0\n")  # light_theme
+        f.write("1\n")  # dark_theme
+        f.write("0\n")  # custom_theme
+        f.write("0\n")  # primary_colour
+        f.write("0\n")  # secondary_colour
+        f.write("0\n")  # font_colour
 
 def SettingsMenuFunc():
     global SettingsMenuLightThemechkbx
@@ -71,6 +179,9 @@ def SettingsMenuFunc():
     try:
         with open("settings.txt", "r") as f:
             settings = f.read().splitlines()
+            if len(settings) < 6:  # Check if settings has enough lines
+                raise IndexError("Settings file is incomplete.")
+
             light_theme = settings[0]
             dark_theme = settings[1]
             custom_theme = settings[2]
@@ -79,8 +190,8 @@ def SettingsMenuFunc():
             font_colour = settings[5]
 
 
-
-    except FileNotFoundError:
+    except (FileNotFoundError, IndexError):  # Handle both exceptions
+        create_default_settings_file()  # Create and populate the settings file
         light_theme = "0"
         dark_theme = "1"
         custom_theme = "0"
@@ -145,9 +256,9 @@ def SettingsMenuFunc():
                                                        checkbox_width=50,
                                                        checkbox_height=30,
                                                        corner_radius=20,
-                                                       hover_color="#3d3d3d",
-                                                       fg_color="#828282",
-                                                       command=save_settings)
+                                                       hover_color="#FFFFFF",
+                                                       fg_color="#FFFFFF",
+                                                       command=lambda: set_theme('light'))
     
     SettingsMenuLightThemechkbx.grid(column=1,
                                 row=0,
@@ -165,7 +276,7 @@ def SettingsMenuFunc():
                                                        corner_radius=20,
                                                        hover_color="#3d3d3d",
                                                        fg_color="#828282",
-                                                       command=save_settings)
+                                                       command=lambda: set_theme('light'))
     
     SettingsMenuDarkThemechkbx.grid(column=2,
                                 row=0,
@@ -218,7 +329,7 @@ def SettingsMenuFunc():
                                                        corner_radius=10,
                                                        hover_color="#3d3d3d",
                                                        fg_color="#828282",
-                                                       command=save_settings)
+                                                       command=lambda: set_theme('light'))
     
     SettingsMenuCustomThemechkbx.grid(column=1,
                                       row=0,
@@ -295,7 +406,8 @@ def SettingsMenuFunc():
                                                        height=30,
                                                        corner_radius=8,
                                                        fg_color="#828282",
-                                                       hover_color="#3d3d3d")
+                                                       hover_color="#3d3d3d",
+                                                       command=secondary_color_select_func)
 
     SecondaryColourSelectButton.grid(column=1,
                                    row=0,
@@ -334,7 +446,8 @@ def SettingsMenuFunc():
                                                        height=30,
                                                        corner_radius=8,
                                                        fg_color="#828282",
-                                                       hover_color="#3d3d3d")
+                                                       hover_color="#3d3d3d",
+                                                       command=font_color_select_func)
 
     FontColourSelectButton.grid(column=1,
                                    row=0,
