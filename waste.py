@@ -61,6 +61,7 @@ def WasteItemFinal():
 # add waste button
 
 def Addwaste():
+     # global so can be grabbed in other function
     global ItemCount
     global ItemCode
 

@@ -12,6 +12,7 @@ import ctypes
 
 # Update Button
 def update_item():
+     # grab the values that will be updated
     new_values = (
         EditCheckItemsCodeEnt.get(),
         EditCheckItemsNameEnt.get(),
@@ -218,17 +219,7 @@ def EditCheckItemsMenuFunc():
                                   padx=4
                                   )
     
-    item_code = FindStockEnt.get()
-
-    # Database stuff
-    conn = sqlite3.connect("Stock.db")
-    cur = conn.cursor()
-
-    # Fetch data based on item_code
-    cur.execute("SELECT * FROM Item WHERE ItemCode = ?", (item_code,))
-    item = cur.fetchone()
-
-    # submit Edit
+        # submit Edit
     EditCheckItemsButton = customtkinter.CTkButton(master=EditCheckItemsMenu,
                                         text="Change",
                                         font=customtkinter.CTkFont(family="Helvetica", size=30),
@@ -245,6 +236,18 @@ def EditCheckItemsMenuFunc():
                          padx=25,
                          sticky="NS"
                          )
+    
+    item_code = FindStockEnt.get()
+
+    # Database stuff
+    conn = sqlite3.connect("Stock.db")
+    cur = conn.cursor()
+
+    # Fetch data based on item_code
+    cur.execute("SELECT * FROM Item WHERE ItemCode = ?", (item_code,))
+    item = cur.fetchone()
+
+
 
 
     # If item exists, populate the fields
@@ -302,3 +305,4 @@ def EditItemFunc():
                          padx=25,
                          sticky="NS"
                          )
+    
