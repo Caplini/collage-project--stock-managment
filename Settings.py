@@ -192,12 +192,6 @@ def SettingsMenuFunc():
 
     except (FileNotFoundError, IndexError):  # Handle both exceptions
         create_default_settings_file()  # Create and populate the settings file
-        light_theme = "0"
-        dark_theme = "1"
-        custom_theme = "0"
-        primary_colour = "0"
-        secondary_colour = "0"
-        font_colour = "0"
 
     SettingsMenu = customtkinter.CTkToplevel() # Edit/check stock window
     SettingsMenu.configure(height=800,
